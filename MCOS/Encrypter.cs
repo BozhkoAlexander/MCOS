@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using System.IO;
 using System.Security.Cryptography;
 
-namespace WindowsFormsApplication1
+namespace MCOS
 {
     public partial class Encrypter : Form
     {
@@ -19,11 +19,11 @@ namespace WindowsFormsApplication1
             InitializeComponent();
         }
 
-        static byte[] EncryptStringToBytes_Aes(string plainText, byte[] Key, byte[] IV)
+        static byte[] EncryptStringToBytes_Aes(byte[] inputBytes, byte[] Key, byte[] IV)
         {
             // Check arguments.
-            if (plainText == null || plainText.Length <= 0)
-                throw new ArgumentNullException("plainText");
+            if (inputBytes == null || inputBytes.Length <= 0)
+                throw new ArgumentNullException("inputBytes");
             if (Key == null || Key.Length <= 0)
                 throw new ArgumentNullException("Key");
             if (IV == null || IV.Length <= 0)
@@ -48,7 +48,7 @@ namespace WindowsFormsApplication1
                         {
 
                             //Write all data to the stream.
-                            swEncrypt.Write(plainText);
+                            swEncrypt.Write(inputBytes);
                         }
                         encrypted = msEncrypt.ToArray();
                     }
@@ -101,19 +101,43 @@ namespace WindowsFormsApplication1
             byte[] bytes = new byte[blockSize];
             int numBytesToRead = (int)inputFileStream.Length;
             int numBytesRead = 0;
-            while (numBytesToRead > 0)
+            string path = "ecrypt" + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString();
+            StreamWriter sw = new StreamWriter(path + ".enc");
+            try
             {
-                // Read may return anything from 0 to 10.
-                int n = inputFileStream.Read(bytes, numBytesRead, blockSize);
-                // The end of the file is reached.
-                if (n == 0)
+                while (numBytesToRead > 0)
                 {
-                    break;
+                    // Read may return anything from 0 to 10.'
+                    int n = inputFileStream.Read(bytes, 0, blockSize);
+                    // The end of the file is reached.
+                    if (n == 0)
+                    {
+                        break;
+                    }
+                    // Encrypt the string to an array of bytes.
+                    byte[] encrypted = EncryptStringToBytes_Aes(bytes, encryptkey, encryptIV);
+                    //actions with block
+
+                    /******************/
+                    //outputFileStream.Write(encrypted, numBytesRead, blockSize);
+                    sw.Write(Convert.ToBase64String(encrypted));
+                    numBytesRead += n;
+                    numBytesToRead -= n;
                 }
-                // Encrypt the string to an array of bytes.
-                byte[] encrypted = EncryptStringToBytes_Aes("sss", encrypter.Key, encrypter.IV);
-                numBytesRead += n;
-                numBytesToRead -= n;
+                sw.Close();
+                //save key
+                StreamWriter keyWriter = new StreamWriter(path + ".key");
+                keyWriter.WriteLine(Convert.ToBase64String(encryptkey));
+                keyWriter.WriteLine(Convert.ToBase64String(encryptIV));
+                keyWriter.Close();
+                //change interface
+                statusLabel.Text = "Encryption is completed.";
+                MessageBox.Show("Encryption is completed.");
+            }
+            catch (Exception ex)
+            {
+                statusLabel.Text = "Encrypt error.";
+                MessageBox.Show("Encrypt error: " + ex.Message + ". Length input: " + inputFileStream.Length + ", current position: " + numBytesRead + ", block size: " + blockSize + ".");
             }
         }
 
@@ -124,7 +148,8 @@ namespace WindowsFormsApplication1
             using (Aes myAes = Aes.Create())
             {
                 keyTextBox.Text = Convert.ToBase64String(myAes.Key);
-                encrypter = myAes;
+                encryptkey = myAes.Key;
+                encryptIV = myAes.IV;
 
                 encryptButton.Enabled = true;
             }

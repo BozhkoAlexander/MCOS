@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using System.Security.Cryptography;
 
-namespace WindowsFormsApplication1
+namespace MCOS
 {
     partial class Encrypter
     {
@@ -42,7 +42,6 @@ namespace WindowsFormsApplication1
             this.generateKeyButton = new System.Windows.Forms.Button();
             this.label5 = new System.Windows.Forms.Label();
             this.keyTextBox = new System.Windows.Forms.TextBox();
-            this.saveButton = new System.Windows.Forms.Button();
             this.encryptButton = new System.Windows.Forms.Button();
             this.rComboBox = new System.Windows.Forms.ComboBox();
             this.lComboBox = new System.Windows.Forms.ComboBox();
@@ -118,7 +117,6 @@ namespace WindowsFormsApplication1
             this.encrypterGroupBox.Controls.Add(this.generateKeyButton);
             this.encrypterGroupBox.Controls.Add(this.label5);
             this.encrypterGroupBox.Controls.Add(this.keyTextBox);
-            this.encrypterGroupBox.Controls.Add(this.saveButton);
             this.encrypterGroupBox.Controls.Add(this.encryptButton);
             this.encrypterGroupBox.Controls.Add(this.rComboBox);
             this.encrypterGroupBox.Controls.Add(this.lComboBox);
@@ -162,20 +160,10 @@ namespace WindowsFormsApplication1
             this.keyTextBox.Size = new System.Drawing.Size(295, 20);
             this.keyTextBox.TabIndex = 12;
             // 
-            // saveButton
-            // 
-            this.saveButton.Enabled = false;
-            this.saveButton.Location = new System.Drawing.Point(398, 122);
-            this.saveButton.Name = "saveButton";
-            this.saveButton.Size = new System.Drawing.Size(75, 23);
-            this.saveButton.TabIndex = 11;
-            this.saveButton.Text = "Save";
-            this.saveButton.UseVisualStyleBackColor = true;
-            // 
             // encryptButton
             // 
             this.encryptButton.Enabled = false;
-            this.encryptButton.Location = new System.Drawing.Point(317, 122);
+            this.encryptButton.Location = new System.Drawing.Point(398, 122);
             this.encryptButton.Name = "encryptButton";
             this.encryptButton.Size = new System.Drawing.Size(75, 23);
             this.encryptButton.TabIndex = 10;
@@ -320,8 +308,8 @@ namespace WindowsFormsApplication1
 
         #endregion
 
-        Stream inputFile;
-        Aes encrypter;
+        byte[] encryptkey;
+        byte[] encryptIV;
 
         private System.Windows.Forms.MenuStrip mainMenu;
         private System.Windows.Forms.StatusStrip statusStrip;
@@ -339,7 +327,6 @@ namespace WindowsFormsApplication1
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Button encryptButton;
         private System.Windows.Forms.Button generateKeyButton;
         private System.Windows.Forms.Label label5;

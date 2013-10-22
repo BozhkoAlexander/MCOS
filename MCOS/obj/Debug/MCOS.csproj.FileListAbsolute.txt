@@ -2,8 +2,8 @@ C:\Users\Alexander\Documents\Visual Studio 2012\Projects\MCOS\MCOS\bin\Debug\MCO
 C:\Users\Alexander\Documents\Visual Studio 2012\Projects\MCOS\MCOS\bin\Debug\MCOS.exe
 C:\Users\Alexander\Documents\Visual Studio 2012\Projects\MCOS\MCOS\bin\Debug\MCOS.pdb
 C:\Users\Alexander\Documents\Visual Studio 2012\Projects\MCOS\MCOS\obj\Debug\MCOS.csprojResolveAssemblyReference.cache
-C:\Users\Alexander\Documents\Visual Studio 2012\Projects\MCOS\MCOS\obj\Debug\WindowsFormsApplication1.Encrypter.resources
 C:\Users\Alexander\Documents\Visual Studio 2012\Projects\MCOS\MCOS\obj\Debug\MCOS.Properties.Resources.resources
 C:\Users\Alexander\Documents\Visual Studio 2012\Projects\MCOS\MCOS\obj\Debug\MCOS.csproj.GenerateResource.Cache
 C:\Users\Alexander\Documents\Visual Studio 2012\Projects\MCOS\MCOS\obj\Debug\MCOS.exe
 C:\Users\Alexander\Documents\Visual Studio 2012\Projects\MCOS\MCOS\obj\Debug\MCOS.pdb
+C:\Users\Alexander\Documents\Visual Studio 2012\Projects\MCOS\MCOS\obj\Debug\MCOS.Encrypter.resources
