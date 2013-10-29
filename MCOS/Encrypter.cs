@@ -19,6 +19,13 @@ namespace MCOS
             InitializeComponent();
         }
 
+		public byte[] XOR(byte[] buffer1, byte[] buffer2)
+		{
+			for(int i = 0; i < buffer1.Length; i++)
+				buffer1[i] ^= buffer2[i];
+			return buffer1;
+		}
+
         static byte[] EncryptStringToBytes_Aes(byte[] inputBytes, byte[] Key, byte[] IV)
         {
             // Check arguments.
@@ -105,6 +112,18 @@ namespace MCOS
             StreamWriter sw = new StreamWriter(path + ".enc");
             try
             {
+				int delayN = Convert.ToInt32(nComboBox.SelectedText);
+				int delayR = Convert.ToInt32(rComboBox.SelectedText);
+				int delayL = Convert.ToInt32(lComboBox.SelectedText);
+				int counterN = 0;
+				int counterR = 0;
+				int counterL = 0;
+				byte[] bufferN = null;// = new byte[blockSize*delayN];
+				byte[] bufferR = null;// = new byte[blockSize*delayR];
+				byte[] bufferL = null;// = new byte[blockSize*delayL];
+				MemoryStream streamN = new MemoryStream();
+				MemoryStream streamR = new MemoryStream();
+				MemoryStream streamL = new MemoryStream();
                 while (numBytesToRead > 0)
                 {
                     // Read may return anything from 0 to 10.'
@@ -118,11 +137,73 @@ namespace MCOS
                     byte[] encrypted = EncryptStringToBytes_Aes(bytes, encryptkey, encryptIV);
                     //actions with block
 
+					//delayL N blocks
+					if (counterN < delayN)
+					{
+						streamN.Write(encrypted, 0, encrypted.Length);
+						counterN++;
+					}
+					else 
+					{
+						counterN = 0;
+						bufferN = streamN.ToArray();
+						streamN.Dispose();
+						streamN = new MemoryStream();
+						//decrypt n
+						//bufferN = EncryptStringToBytes_Aes(bufferN, encryptkey, encryptIV);
+						/*********/
+
+						// xor buffers
+						if (bufferR!=null)
+						{
+							bufferN = XOR(bufferN, bufferR);
+							bufferR = null;
+						}
+						//encrypt n
+						//bufferN = EncryptStringToBytes_Aes(bufferN, encryptkey, encryptIV);
+						/*********/
+
+						//delay l blocks
+						if (counterL < delayL)
+						{
+							streamL.Write(bufferN, 0, bufferN.Length);
+							counterL++;
+						}
+						else
+						{
+							counterL = 0;
+							bufferL = streamL.ToArray();
+							streamL.Dispose();
+							streamL = new MemoryStream();
+						}
+						//xor buffers
+						if (bufferL != null) 
+						{
+							encrypted = XOR(encrypted, bufferL);
+							bufferL = null;
+						}
+						//delay r blocks
+						if (counterR < delayR)
+						{
+							streamR.Write(encrypted, 0, encrypted.Length);
+							counterR++;
+						}
+						else
+						{
+							counterR = 0;
+							bufferR = streamR.ToArray();
+							streamR.Dispose();
+							streamR = new MemoryStream();
+							//decrypt r
+							//bufferR = EncryptStringToBytes_Aes(bufferR, encryptkey, encryptIV);
+							/*********/
+						}
+					}
+					//outputFileStream.Write(encrypted, numBytesRead, blockSize);
+					sw.Write(Convert.ToBase64String(encrypted));
+					numBytesRead += n;
+					numBytesToRead -= n;
                     /******************/
-                    //outputFileStream.Write(encrypted, numBytesRead, blockSize);
-                    sw.Write(Convert.ToBase64String(encrypted));
-                    numBytesRead += n;
-                    numBytesToRead -= n;
                 }
                 sw.Close();
                 //save key
@@ -137,13 +218,13 @@ namespace MCOS
             catch (Exception ex)
             {
                 statusLabel.Text = "Encrypt error.";
-                MessageBox.Show("Encrypt error: " + ex.Message + ". Length input: " + inputFileStream.Length + ", current position: " + numBytesRead + ", block size: " + blockSize + ".");
+                MessageBox.Show("Encrypt error: " + ex.Message + " Length input: " + inputFileStream.Length + ", current position: " + numBytesRead + ", block size: " + blockSize + ".");
             }
         }
 
         private void generateKeyButton_Click(object sender, EventArgs e)
         {
-            // class.  This generates a new key and initialization 
+            // This generates a new key and initialization 
             // vector (IV).
             using (Aes myAes = Aes.Create())
             {
