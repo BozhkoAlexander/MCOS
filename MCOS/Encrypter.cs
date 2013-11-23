@@ -150,7 +150,7 @@ namespace MCOS
 						streamN.Dispose();
 						streamN = new MemoryStream();
 						//decrypt n
-						//bufferN = EncryptStringToBytes_Aes(bufferN, encryptkey, encryptIV);
+						bufferN = EncryptStringToBytes_Aes(bufferN, encryptkey, encryptIV);
 						/*********/
 
 						// xor buffers
