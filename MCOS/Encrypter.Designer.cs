@@ -71,12 +71,16 @@ namespace MCOS
             this.label8 = new System.Windows.Forms.Label();
             this.label9 = new System.Windows.Forms.Label();
             this.label10 = new System.Windows.Forms.Label();
+            this.DecrypterPictureBox = new System.Windows.Forms.PictureBox();
+            this.EncrypterPictureBox = new System.Windows.Forms.PictureBox();
             this.mainMenu.SuspendLayout();
             this.statusStrip.SuspendLayout();
             this.inputFileGroupBox.SuspendLayout();
             this.DecrypterFileGroupBox.SuspendLayout();
             this.encrypterGroupBox.SuspendLayout();
             this.DecrypterGroupBox.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DecrypterPictureBox)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.EncrypterPictureBox)).BeginInit();
             this.SuspendLayout();
             // 
             // mainMenu
@@ -120,7 +124,7 @@ namespace MCOS
             // 
             this.statusStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.statusLabel});
-            this.statusStrip.Location = new System.Drawing.Point(0, 249);
+            this.statusStrip.Location = new System.Drawing.Point(0, 460);
             this.statusStrip.Name = "statusStrip";
             this.statusStrip.Size = new System.Drawing.Size(504, 22);
             this.statusStrip.TabIndex = 1;
@@ -541,12 +545,33 @@ namespace MCOS
             this.label10.TabIndex = 15;
             this.label10.Text = "Enter delay n:";
             // 
+            // DecrypterPictureBox
+            // 
+            this.DecrypterPictureBox.Image = global::MCOS.Properties.Resources.Decrypter;
+            this.DecrypterPictureBox.Location = new System.Drawing.Point(12, 253);
+            this.DecrypterPictureBox.Name = "DecrypterPictureBox";
+            this.DecrypterPictureBox.Size = new System.Drawing.Size(480, 200);
+            this.DecrypterPictureBox.TabIndex = 17;
+            this.DecrypterPictureBox.TabStop = false;
+            this.DecrypterPictureBox.Visible = false;
+            // 
+            // EncrypterPictureBox
+            // 
+            this.EncrypterPictureBox.Image = global::MCOS.Properties.Resources.Encrypter;
+            this.EncrypterPictureBox.Location = new System.Drawing.Point(12, 253);
+            this.EncrypterPictureBox.Name = "EncrypterPictureBox";
+            this.EncrypterPictureBox.Size = new System.Drawing.Size(480, 200);
+            this.EncrypterPictureBox.TabIndex = 16;
+            this.EncrypterPictureBox.TabStop = false;
+            // 
             // Encrypter
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(504, 271);
+            this.ClientSize = new System.Drawing.Size(504, 482);
+            this.Controls.Add(this.DecrypterPictureBox);
+            this.Controls.Add(this.EncrypterPictureBox);
             this.Controls.Add(this.DecrypterFileGroupBox);
             this.Controls.Add(this.DecrypterGroupBox);
             this.Controls.Add(this.encrypterGroupBox);
@@ -554,8 +579,8 @@ namespace MCOS
             this.Controls.Add(this.statusStrip);
             this.Controls.Add(this.mainMenu);
             this.MainMenuStrip = this.mainMenu;
-            this.MaximumSize = new System.Drawing.Size(520, 310);
-            this.MinimumSize = new System.Drawing.Size(520, 310);
+            this.MaximumSize = new System.Drawing.Size(520, 520);
+            this.MinimumSize = new System.Drawing.Size(520, 520);
             this.Name = "Encrypter";
             this.Text = "Encrypter";
             this.Load += new System.EventHandler(this.Encrypter_Load);
@@ -571,6 +596,8 @@ namespace MCOS
             this.encrypterGroupBox.PerformLayout();
             this.DecrypterGroupBox.ResumeLayout(false);
             this.DecrypterGroupBox.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.DecrypterPictureBox)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.EncrypterPictureBox)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -621,6 +648,8 @@ namespace MCOS
         private System.Windows.Forms.TextBox KeysFileTextBox;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.PictureBox EncrypterPictureBox;
+        private System.Windows.Forms.PictureBox DecrypterPictureBox;
     }
 }
 

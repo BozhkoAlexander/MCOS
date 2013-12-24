@@ -44,12 +44,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Aes.cs" />
     <Compile Include="Encrypter.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Encrypter.Designer.cs">
       <DependentUpon>Encrypter.cs</DependentUpon>
     </Compile>
+    <Compile Include="EncryptionHelper.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Encrypter.resx">
@@ -77,6 +79,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\Encrypter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\Decrypter.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

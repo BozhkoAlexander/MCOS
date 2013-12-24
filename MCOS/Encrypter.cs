@@ -212,13 +212,28 @@ namespace MCOS
 
         private void encryptButton_Click(object sender, EventArgs e)
         {
+            byte[] inp = File.ReadAllBytes(inputFileTextBox.Text);
+            EncryptionHelper AesHelper = new EncryptionHelper(encryptkey, encryptIV);
+            string inpString = AesHelper.ByteArrayToHexString(inp);
+            string encryptedString = AesHelper.EncryptAndEncode(inpString);
+            byte[] encBytes = AesHelper.StringToByteArray(encryptedString);
             // Now read s into a byte buffer.
             int blockSize = (int)Math.Pow(Convert.ToDouble(2), Convert.ToDouble(4 + blockSizeComboBox.SelectedIndex));
             Stream inputFileStream = openFileDialog.OpenFile();
             byte[] bytes = new byte[blockSize];
             int numBytesToRead = (int)inputFileStream.Length;
             int numBytesRead = 0;
-            string path = "ecrypt" + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString();
+            string path = "encrypt" + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString();
+            File.WriteAllBytes(path + ".enc", encBytes);
+            //save key
+            StreamWriter keyWriter = new StreamWriter(path + ".key");
+            keyWriter.WriteLine(Convert.ToBase64String(encryptkey));
+            keyWriter.WriteLine(Convert.ToBase64String(encryptIV));
+            keyWriter.Close();
+            //change interface
+            statusLabel.Text = "Encryption is completed.";
+            MessageBox.Show("Encryption is completed.");
+            return;
             StreamWriter sw = new StreamWriter(path + ".enc");
             try
             {
@@ -316,14 +331,6 @@ namespace MCOS
                     /******************/
                 }
                 sw.Close();
-                //save key
-                StreamWriter keyWriter = new StreamWriter(path + ".key");
-                keyWriter.WriteLine(Convert.ToBase64String(encryptkey));
-                keyWriter.WriteLine(Convert.ToBase64String(encryptIV));
-                keyWriter.Close();
-                //change interface
-                statusLabel.Text = "Encryption is completed.";
-                MessageBox.Show("Encryption is completed.");
             }
             catch (Exception ex)
             {
@@ -356,6 +363,9 @@ namespace MCOS
                 this.DecrypterFileGroupBox.Visible = false;
                 this.encrypterGroupBox.Visible = true;
                 this.DecrypterGroupBox.Visible = false;
+                this.openFileDialog.Filter = "All files|*.*";
+                this.EncrypterPictureBox.Visible = true;
+                this.DecrypterPictureBox.Visible = false;
             }
             else
             {
@@ -365,6 +375,8 @@ namespace MCOS
                 this.DecrypterFileGroupBox.Visible = true;
                 this.encrypterGroupBox.Visible = false;
                 this.DecrypterGroupBox.Visible = true;
+                this.EncrypterPictureBox.Visible = false;
+                this.DecrypterPictureBox.Visible = true;
             }
         }
 
@@ -382,11 +394,23 @@ namespace MCOS
             byte[] aesIV = Convert.FromBase64String(aesIVString);
             keyReader.Close();
 
+            EncryptionHelper AesHelper = new EncryptionHelper(aesKey, aesIV);
+            byte[] encFile = File.ReadAllBytes(EncFileTextBox.Text);
+            string encString = AesHelper.ByteArrayToHexString(encFile);
+            string decString = AesHelper.DecodeAndDecrypt(encString);
+            byte[] decrypt = AesHelper.StringToByteArray(decString);
+
             byte[] bytes = new byte[blockSize];
             int numBytesToRead = (int)inputFileStream.Length;
             int numBytesRead = 0;
             string path = "decrypt" + DateTime.Now.Year.ToString() + DateTime.Now.Month.ToString() + DateTime.Now.Day.ToString() + DateTime.Now.Hour.ToString() + DateTime.Now.Minute.ToString() + DateTime.Now.Second.ToString();
             StreamWriter sw = new StreamWriter(path + ".dec");
+            sw.Close();
+            //change interface
+            statusLabel.Text = "Decryption is completed.";
+            MessageBox.Show("Decryption is completed.");
+            File.WriteAllBytes(path + ".dec", decrypt);
+            return;
             try
             {
                 int delayN = Convert.ToInt32(DDelayNComboBox.SelectedItem);
